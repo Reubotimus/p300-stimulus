@@ -78,7 +78,6 @@ for char in displayed_chars:
     i += 1
 
 # starts game loop
-iter_groups = iter(groups)
 group_num = 0
 time_since_intensification = time.time()
 row_intensified = False
