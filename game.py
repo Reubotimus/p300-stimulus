@@ -76,6 +76,7 @@ for char in displayed_chars:
         pos[0] += char_surface_size
         col += 1
     i += 1
+random.shuffle(groups)
 
 # starts game loop
 group_num = 0
