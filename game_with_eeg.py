@@ -5,19 +5,20 @@ import explorepy
 import argparse
 
 # adjustable variables
-stimulus_interval = 0.5  # time in s between each row / column
+stimulus_interval = 1.2  # time in s between each row / column
 intensification_duration = 0.1  # time that a row is intensified for
 # number of times each row and column will be cycled through before a break
 n_cycles_in_epoch = 1
 # determines if the break is automatic or epoch is reinitiated by user pressing space
 auto_epoch = True
-break_time = 2  # break time between epochs
+break_time = 4  # break time between epochs
 displayed_chars = "123456789".upper()
 matrix_dimensions = (3, 3)
 font_size = 90
 grey = (50, 50, 50)
 intense = False
-screen_size = (1280, 750)
+# screen_size = (1280, 750)
+screen_size = (800, 600)
 
 # We create the parser and explorer to record the data from the new EEG device
 
@@ -26,10 +27,8 @@ screen_size = (1280, 750)
 # WARNING: We used the int() type caster in the explore.setMarker. This can Cause an issue in the future if you use letters. Letter -> Mapping can be used in the future
 # WARNING !!!!!!!!!
 
-parser = argparse.ArgumentParser(
-    description="Example code for marker generation")
-parser.add_argument("-n", "--name", dest="name",
-                    type=str, help="Name of the device.")
+parser = argparse.ArgumentParser(description="Example code for marker generation")
+parser.add_argument("-n", "--name", dest="name", type=str, help="Name of the device.")
 parser.add_argument(
     "-f",
     "--filename",
@@ -50,11 +49,9 @@ explore.record_data(
 
 # finds derived values
 char_surface_size = min(
-    (screen_size[0] / matrix_dimensions[0],
-     screen_size[1] / matrix_dimensions[1])
+    (screen_size[0] / matrix_dimensions[0], screen_size[1] / matrix_dimensions[1])
 )
-starting_x_pos = (
-    screen_size[0] - char_surface_size * matrix_dimensions[0]) / 2
+starting_x_pos = (screen_size[0] - char_surface_size * matrix_dimensions[0]) / 2
 
 # Initialises the pygame screen
 pygame.init()
@@ -66,7 +63,7 @@ font = pygame.font.Font("HelveticaBold.ttf", font_size)
 # creates class for characters being displayed on speller
 class Character:
     def __init__(self, character, position):
-        self.charater = character
+        self.character = character
         self.character_image = font.render(character, True, grey)
         self.image_location = (
             (char_surface_size - self.character_image.get_width()) / 2,
@@ -79,33 +76,34 @@ class Character:
     def intensify(self):
         if intense == True:
             self.surface.fill("white")
-            self.character_image = font.render(self.charater, True, "black")
+            self.character_image = font.render(self.character, True, "black")
             self.surface.blit(self.character_image, self.image_location)
-            explore.set_marker(code=int(self.charater))
+            explore.set_marker(code=int(self.character))
         else:
             self.surface.fill("black")
-            self.character_image = font.render(self.charater, True, "white")
+            self.character_image = font.render(self.character, True, "white")
             self.surface.blit(self.character_image, self.image_location)
-            explore.set_marker(code=int(self.charater))
+            explore.set_marker(code=int(self.character))
 
     def darken(self):
         self.surface.fill("black")
-        self.character_image = font.render(self.charater, True, grey)
+        self.character_image = font.render(self.character, True, grey)
         self.surface.blit(self.character_image, self.image_location)
 
 
 # Initialises all the characters to be shown on screen, saves each character in their group
 # each group is either a row or column
 chars = []
-groups = [[] for i in range(matrix_dimensions[0] + matrix_dimensions[1])]
+# groups = [[] for i in range(matrix_dimensions[0] + matrix_dimensions[1])]
 i = 1
 row = 0
 col = 0
 pos = [starting_x_pos, 0]
+# pos2 = (starting_x_pos, 0)
 for char in displayed_chars:
     chars.append(Character(char, tuple(pos)))
-    groups[row].append(i - 1)
-    groups[col + matrix_dimensions[0]].append(i - 1)
+    # groups[row].append(i - 1)
+    # groups[col + matrix_dimensions[0]].append(i - 1)
     if i % matrix_dimensions[0] == 0 and i != 0:
         pos[0] = starting_x_pos
         pos[1] += char_surface_size
@@ -116,6 +114,7 @@ for char in displayed_chars:
         col += 1
     i += 1
 random.shuffle(chars)
+
 
 # starts game loop
 group_num = 0
@@ -163,14 +162,15 @@ while True:
                         shuffled = True
                 group_num = 0
                 n_cycles += 1
-            # intensifies new char
-            chars[group_num].intensify()
+            else:
+                # intensifies new char
+                chars[group_num].intensify()
+                group_num += 1
 
             # refreshes and puts all characters on screen
             screen.fill("black")
             for char in chars:
                 screen.blit(char.surface, char.screen_position)
-            group_num += 1
             row_intensified = True
             time_since_intensification = time.time()
             # ends epoch if completed n_cycles in epoch
