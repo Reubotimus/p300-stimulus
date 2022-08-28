@@ -5,12 +5,13 @@ import explorepy
 import argparse
 
 # adjustable variables
-STIMULUS_INTERVAL = 0.25  # time in s between each row / column
-INTENSIFICATION_DURATION = 0.1  # time that a row is intensified for
+STIMULUS_INTERVAL = 1/30  # time in s between each row / column
+INTENSIFICATION_DURATION = STIMULUS_INTERVAL * \
+    0.5  # time that a row is intensified for
 # number of times each row and column will be cycled through before a break
 N_CYCLES_IN_EPOCH = 5
 # determines if the break is automatic or epoch is reinitiated by user pressing space
-AUTO_EPOCH = True
+AUTO_EPOCH = False
 BREAK_TIME = 4  # break time between epochs
 DISPLAYED_CHARS = "123456789".upper()
 MATRIX_DIMENSIONS = (3, 3)
@@ -19,6 +20,7 @@ GREY = (50, 50, 50)
 INTENSE = False
 # SCREEN_SIZE = (1280, 750)
 SCREEN_SIZE = (1600, 900)
+FPS = 60
 
 # We create the parser and explorer to record the data from the new EEG device
 
@@ -196,4 +198,4 @@ while True:
         row_intensified = False
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(FPS)
