@@ -21,8 +21,11 @@ BREAK_TIME = 4
 DISPLAYED_CHARS = "123456789".upper()
 MATRIX_DIMENSIONS = (3, 3)
 FONT_SIZE = 120
-INTENSE = False
-# SCREEN_SIZE = (1280, 750)
+# Choose type of flash highlight
+# 0 = Character only
+# 1 = Surface area
+# 2 = Character box area (small area around character)
+FLASH_TYPE = 2
 SCREEN_SIZE = (1600, 900)
 # Whether the distribution of character is fully spread out in rectangle shape or
 # focus in square-ish shape
@@ -82,7 +85,7 @@ def init_char_array(starting_x_pos, char_surface_size, explore):
     col = 0
     pos = [starting_x_pos, 0]
     for char in DISPLAYED_CHARS:
-        chars.append(Character(char, tuple(pos), char_surface_size, font, INTENSE, explore))
+        chars.append(Character(char, tuple(pos), char_surface_size, font, FLASH_TYPE, explore))
         # groups[row].append(i - 1)
         # groups[col + MATRIX_DIMENSIONS[0]].append(i - 1)
         if i % MATRIX_DIMENSIONS[0] == 0 and i != 0:
