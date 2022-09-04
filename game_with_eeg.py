@@ -24,6 +24,9 @@ FONT_SIZE = 120
 INTENSE = False
 # SCREEN_SIZE = (1280, 750)
 SCREEN_SIZE = (1600, 900)
+# Whether the distribution of character is fully spread out in rectangle shape or
+# focus in square-ish shape
+SQUARE_SHAPE_DISTRIBUTION = False
 FPS = 60
 
 
@@ -78,18 +81,17 @@ def init_char_array(starting_x_pos, char_surface_size, explore):
     row = 0
     col = 0
     pos = [starting_x_pos, 0]
-    # pos2 = (starting_x_pos, 0)
     for char in DISPLAYED_CHARS:
         chars.append(Character(char, tuple(pos), char_surface_size, font, INTENSE, explore))
         # groups[row].append(i - 1)
         # groups[col + MATRIX_DIMENSIONS[0]].append(i - 1)
         if i % MATRIX_DIMENSIONS[0] == 0 and i != 0:
             pos[0] = starting_x_pos
-            pos[1] += char_surface_size
+            pos[1] += char_surface_size[1]
             col = 0
             row += 1
         else:
-            pos[0] += char_surface_size
+            pos[0] += char_surface_size[0]
             col += 1
         i += 1
     random.shuffle(chars)
@@ -115,8 +117,14 @@ def main():
     explore = create_explore_object(args)
 
     # finds derived values
-    char_surface_size = min((SCREEN_SIZE[0] / MATRIX_DIMENSIONS[0], SCREEN_SIZE[1] / MATRIX_DIMENSIONS[1]))
-    starting_x_pos = (SCREEN_SIZE[0] - char_surface_size * MATRIX_DIMENSIONS[0]) / 2
+    char_surface_size = (SCREEN_SIZE[0] / MATRIX_DIMENSIONS[0], SCREEN_SIZE[1] / MATRIX_DIMENSIONS[1])
+    starting_x_pos = 0
+    if SQUARE_SHAPE_DISTRIBUTION:
+        tmp = min(char_surface_size[0], char_surface_size[1])
+        char_surface_size = (tmp, tmp)
+        starting_x_pos = (SCREEN_SIZE[0] - tmp * MATRIX_DIMENSIONS[0]) / 2
+
+    # starting_x_pos = (SCREEN_SIZE[0] - char_surface_size * MATRIX_DIMENSIONS[0]) / 2
 
     # Initialises the pygame screen
     pygame.init()
