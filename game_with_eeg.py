@@ -1,8 +1,10 @@
+from pickle import FALSE
 import pygame
 import random
 import time
 import explorepy
 import argparse
+from mock_explore import MockExplore
 
 # adjustable variables
 STIMULUS_INTERVAL = 1/30  # time in s between each row / column
@@ -41,10 +43,22 @@ parser.add_argument(
     type=str,
     help="Name of the output files.",
 )
+parser.add_argument(
+    "-m",
+    "--mock",
+    dest="mock",
+    default=False,
+    type=bool,
+    help="Use a mock Mentalab Explore device.",
+)
 args = parser.parse_args()
 
 # Create an Explore object
-explore = explorepy.Explore()
+if (args.mock):
+    explore = MockExplore()
+    print("Used mock")
+else:
+    explore = explorepy.Explore()
 explore.connect(device_name=args.name)
 explore.record_data(
     file_name=args.filename, file_type="csv", do_overwrite=True, block=False
