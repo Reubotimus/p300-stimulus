@@ -7,7 +7,7 @@ import argparse
 from mock_explore import MockExplore
 
 # adjustable variables
-STIMULUS_INTERVAL = 1/30  # time in s between each row / column
+STIMULUS_INTERVAL = 1/16  # time in s between each row / column
 INTENSIFICATION_DURATION = STIMULUS_INTERVAL * \
     0.5  # time that a row is intensified for
 # number of times each row and column will be cycled through before a break
@@ -55,8 +55,7 @@ args = parser.parse_args()
 
 # Create an Explore object
 if (args.mock):
-    explore = MockExplore()
-    print("Used mock")
+    explore = MockExplore(log=True)
 else:
     explore = explorepy.Explore()
 explore.connect(device_name=args.name)
