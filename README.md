@@ -1,17 +1,17 @@
-# P300_pygame
+# P300 Stimulus
 
-Pygame portion for a P300 speller.
+A Stimulus for Brain-Computer Interface Spelling
 
-The code is designed to be adjustible so that the the timings, letters and loops can be changed.
+The P300 speller is a brain-computer interface that allows users to type characters by selecting them from a matrix of flashing characters. This interface utilizes EEG signals to detect which character the user is focusing on and uses machine learning algorithms to translate these signals into text.
 
-The game will run through each row and column `n_cycles_in_epoch` times, after which it will either wait `break_time` seconds before starting a new epoch or wait until the user presses space, depending of if `auto_epoch` is true.
+This code generates the matrix of flashing characters and randomizes the order in which rows and columns flash, in line with academic research.
 
-## Command
+To use this code with a Mentalab Explore device to record EEG data, run the following command:
 
-Run with recording daata from Mentalab Explore device
+python game_with_eeg -n [device_name] -f [output_file_name]
 
-`python game_with_eeg -n [device_name] -f [output_file_name]`
+Alternatively, if you do not have access to the device or simply want to modify the pygame code, run:
 
-If you don't have access to the device or just want to make change to pygame code:
+python game_with_eeg -m true
 
-`python game_with_eeg -m true`
+With this code, users can experiment with the P300 speller and potentially improve the design of this brain-computer interface.
